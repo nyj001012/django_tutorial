@@ -1,0 +1,8 @@
+li a {
+    color: salmon;
+    background-color: white;
+}
+
+body {
+    background: white url("images/bonobono.jpeg") no-repeat;
+}
