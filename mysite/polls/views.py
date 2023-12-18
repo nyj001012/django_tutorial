@@ -5,6 +5,7 @@ from django.template import loader
 from django.urls import reverse
 from django.views import generic  # F() 사용: F() 객체를 이용하여 race condition을 방지한다.
 from django.db.models import F
+from django.utils import timezone
 from .models import Question, Choice
 
 
@@ -26,7 +27,7 @@ class IndexView(generic.ListView):
 		Returns:
 			QuerySet: 최근 5개의 질문
 		"""
-		return Question.objects.order_by("-pub_date")[:5]
+		return Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
 
 
 class DetailView(generic.DetailView):
@@ -39,6 +40,12 @@ class DetailView(generic.DetailView):
 	"""
 	model = Question
 	template_name = "polls/detail.html"
+
+	def get_queryset(self):
+		"""
+		미래의 pub_date를 가진 질문은 제외한다.
+		"""
+		return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
