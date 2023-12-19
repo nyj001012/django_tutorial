@@ -1,0 +1,24 @@
+version: '3'
+
+networks:
+  transcendence:
+    driver: bridge
+
+services:
+  django:
+    networks:
+      - transcendence
+    container_name: django
+    build: django
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./django:/app/django
+    restart: always
+
+volumes:
+  django:
+    driver_opts:
+        type: none
+        device: /Users/nayejin/dev/django_tutorial/django
+        o: bind
