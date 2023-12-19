@@ -16,6 +16,19 @@ services:
       - ./django:/app/django
     restart: always
 
+  nginx:
+    networks:
+      - transcendence
+    container_name: nginx
+    build: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./django:/app/django
+    restart: always
+    depends_on:
+      - django
+
 volumes:
   django:
     driver_opts:
