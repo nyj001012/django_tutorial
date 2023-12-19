@@ -9,18 +9,30 @@ RUN apk add --update --no-cache
 # vim 설치
 RUN apk add vim
 
-# /app/django_tutorial/ 디렉토리 생성
-RUN mkdir /app/django_tutorial
+# /app/django/ 디렉토리 생성
+RUN mkdir -p /app/django
 
-# 현재 디렉토리의 파일들을 컨테이너의 /app/django_tutorial/ 폴더에 추가
-ADD . /app/django_tutorial
+# 현재 디렉토리의 파일들을 컨테이너의 /app/django/ 폴더에 추가
+COPY . /app/django
 
 # 작업 디렉토리를 /app/django_tutorial/ 로 변경
-WORKDIR /app/django_tutorial
+WORKDIR /app/django
 
 # 파이썬 가상환경 패키지 설치
 RUN pip install --upgrade pip
-RUN pip install -r /requirements.txt
+RUN pip install -r ./requirements.txt
+
+# 유저 생성
+RUN adduser -D yena
+
+# 소유자 변경
+RUN chown -R yena:yena /app/django
+
+# 권한 변경
+RUN chmod -R 755 /app/django
+
+# 유저 변경
+USER yena
 
 # 8000번 포트 개방
 EXPOSE 8000
